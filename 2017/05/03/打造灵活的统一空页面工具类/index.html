@@ -101,7 +101,7 @@
 
 前言在我们的开发过程中经常会碰到需要显示一些空数据或者异常数据的UI。如果我们使用ListView的话可以很方便去设置emptyview，使用Recyclerview的话则麻烦一点需要自己定制。但是如果在不是使用这些提供好接口的控件时，就需要自己代码里去绘制一个空界面然后动态控制，不仅麻烦而且增加了代码的理解难度。因此我期望打造一个简单灵活">
 <meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/emptyuiemptyui1.png">
-<meta property="og:updated_time" content="2017-05-03T05:11:40.000Z">
+<meta property="og:updated_time" content="2017-05-03T05:24:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="打造灵活的统一空页面工具类">
 <meta name="twitter:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
@@ -343,6 +343,7 @@
 </blockquote>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在我们的开发过程中经常会碰到需要显示一些空数据或者异常数据的UI。如果我们使用ListView的话可以很方便去设置emptyview，使用Recyclerview的话则麻烦一点需要自己定制。但是如果在不是使用这些提供好接口的控件时，就需要自己代码里去绘制一个空界面然后动态控制，不仅麻烦而且增加了代码的理解难度。因此我期望打造一个简单灵活的统一空数据UI控制类来满足我们的需求。</p>
 <h1 id="思路分析及实现"><a href="#思路分析及实现" class="headerlink" title="思路分析及实现"></a>思路分析及实现</h1><p>因为我们的核心要求是灵活，所以这个工具类应该能够去将布局上的任何一个控件替换成空页面。我的思路是先在被替换的控件的父视图找到它然后移除，用我们的空页面去替换。这样子就可以实现任意替换的效果，我们灵活的要求也就达到了。</p>
+<a id="more"></a>
 <ul>
 <li>在父视图中找到被替换的view</li>
 </ul>
