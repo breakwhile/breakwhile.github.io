@@ -1,0 +1,859 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Nothing You Could Do:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android,性能优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+
+前言今天把玩我们公司的APP时，发现打开某个页面会先闪一下，但是在另一台机子情况不会这么明显。review了一下代码并没有发现太大的问题。考虑到两台机子性能差异较大，因此我怀疑是不是UI绘制时耗费了大量的性能，让我们着手验证一下。
+过度绘制分析出问题的这页面如下：
+
+对于UI性能的分析，最简单的方式之一就是使用系统自带的过度绘制功能。步骤如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Android过度绘制的一个例子">
+<meta property="og:url" content="http://www.breakwhile.com/2017/04/07/关于Android过度绘制的一个例子/index.html">
+<meta property="og:site_name" content="BreakWhile's Notes">
+<meta property="og:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+
+前言今天把玩我们公司的APP时，发现打开某个页面会先闪一下，但是在另一台机子情况不会这么明显。review了一下代码并没有发现太大的问题。考虑到两台机子性能差异较大，因此我怀疑是不是UI绘制时耗费了大量的性能，让我们着手验证一下。
+过度绘制分析出问题的这页面如下：
+
+对于UI性能的分析，最简单的方式之一就是使用系统自带的过度绘制功能。步骤如">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/baduibaduibadui2_%E5%89%AF%E6%9C%AC.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/baduibadui1.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/baduibaduibadui3_%E5%89%AF%E6%9C%AC.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/baduibadui4.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/baduibadui5.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/baduibadui6.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/baduibaduibadui7_%E5%89%AF%E6%9C%AC.png">
+<meta property="og:updated_time" content="2017-05-02T16:13:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Android过度绘制的一个例子">
+<meta name="twitter:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+
+前言今天把玩我们公司的APP时，发现打开某个页面会先闪一下，但是在另一台机子情况不会这么明显。review了一下代码并没有发现太大的问题。考虑到两台机子性能差异较大，因此我怀疑是不是UI绘制时耗费了大量的性能，让我们着手验证一下。
+过度绘制分析出问题的这页面如下：
+
+对于UI性能的分析，最简单的方式之一就是使用系统自带的过度绘制功能。步骤如">
+<meta name="twitter:image" content="http://offx8f6cx.bkt.clouddn.com/baduibaduibadui2_%E5%89%AF%E6%9C%AC.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6343102638250264000',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://www.breakwhile.com/2017/04/07/关于Android过度绘制的一个例子/"/>
+
+
+  <title> 关于Android过度绘制的一个例子 | BreakWhile's Notes </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8339a5f89fed3a0283bc1e35eb3b9cb8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BreakWhile's Notes</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">心无所恃，随遇而安。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于Android过度绘制的一个例子
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-04-07T22:46:01+08:00" content="2017-04-07">
+              2017-04-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
+                    <span itemprop="name">Android性能优化</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/04/07/关于Android过度绘制的一个例子/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/07/关于Android过度绘制的一个例子/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/04/07/关于Android过度绘制的一个例子/" class="leancloud_visitors" data-flag-title="关于Android过度绘制的一个例子">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天把玩我们公司的APP时，发现打开某个页面会先闪一下，但是在另一台机子情况不会这么明显。review了一下代码并没有发现太大的问题。考虑到两台机子性能差异较大，因此我怀疑是不是UI绘制时耗费了大量的性能，让我们着手验证一下。</p>
+<h1 id="过度绘制分析"><a href="#过度绘制分析" class="headerlink" title="过度绘制分析"></a>过度绘制分析</h1><p>出问题的这页面如下：</p>
+<p><img src="http://offx8f6cx.bkt.clouddn.com/baduibaduibadui2_%E5%89%AF%E6%9C%AC.png" alt="这里写图片描述"></p>
+<p>对于UI性能的分析，最简单的方式之一就是使用系统自带的过度绘制功能。步骤如下：</p>
+<blockquote>
+<p>打开开发者选项-&gt;调试GPU过度绘制-&gt;显示过度绘制区域<br>开启后会发现界面呈现出各种颜色，在这里每种颜色所表示的含义如下：<br><img src="http://offx8f6cx.bkt.clouddn.com/baduibadui1.png" alt="这里写图片描述"></p>
+</blockquote>
+<a id="more"></a>
+<p>最理想的是蓝色，一个像素只绘制一次。合格的页面绘制是白色、蓝色为主，绿色以上区域不能超过整个的三分之一，颜色越浅越好。关于过度绘制，这里不再过多普及，介绍的资料有很多，我们主要在于如何分析及解决。<br>让我们来看一下打开显示过度绘制之后的页面是怎样的：</p>
+<p><img src="http://offx8f6cx.bkt.clouddn.com/baduibaduibadui3_%E5%89%AF%E6%9C%AC.png" alt="这里写图片描述"></p>
+<p>我的天，简直是个灾难。- -!</p>
+<h1 id="分析布局层次"><a href="#分析布局层次" class="headerlink" title="分析布局层次"></a>分析布局层次</h1><p>在这里我们迫不及待的想看看这个看似简单的布局到底有什么故事在里面。一打开布局的XML文件，500多行的代码让我一下子蛋疼了。但是真正的勇士是敢于直面真正的蛋疼。对此我决定用谷歌给我们提供的一款用于布局层次分析的工具HierarchyViewer。对于这个工具的使用，可以参考一下这篇<a href="http://www.cnblogs.com/Rocky_/archive/2011/11/04/2236243.html" target="_blank" rel="external">文章。</a><br>但是这里我要补充一点的是，这个工具在真机上是没法使用的，只能在虚拟机上使用。这就很蛋疼了，总不能每次我们分析页面都要开一个模拟器来调试吧？好在面包会有的，办法也会有的。我发现了一个可以让真机也可以使用HierarchyViewer的开源库。<a href="https://github.com/romainguy/ViewServer" target="_blank" rel="external">地址戳这里。</a><br>使用方式也很简单，在三个生命周期中各加入三行代码即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class MyActivity extends Activity &#123;</div><div class="line">    public void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        // Set content view, etc.</div><div class="line">        ViewServer.get(this).addWindow(this);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void onDestroy() &#123;</div><div class="line">        super.onDestroy();</div><div class="line">        ViewServer.get(this).removeWindow(this);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void onResume() &#123;</div><div class="line">        super.onResume();</div><div class="line">        ViewServer.get(this).setFocusedWindow(this);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>好了，终于可以打开了，让我们分析一下这个布局的层次：<br><img src="http://offx8f6cx.bkt.clouddn.com/baduibadui4.png" alt="这里写图片描述"><br>我去，再一次蛋疼，十几层的布局层次！！而且细看之下嵌套了很多无意义的布局在里面。看来减少布局层次是势在必行了。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><ol>
+<li>使用RelativeLayout代替多层嵌套的LinearLayout</li>
+</ol>
+<p>考虑一下下面的布局：<br><img src="http://offx8f6cx.bkt.clouddn.com/baduibadui5.png" alt="这里写图片描述"><br>原来的布局最外层使用一个水平LinearLayout嵌套一个imageview，一个垂直Linearyout，再一个TextView。垂直的LinearLayout里再嵌套N个子布局….这样的布局不仅层级较多，而且阅读起来也相对困难。在guide中有这样一段描述：</p>
+<blockquote>
+<p>A RelativeLayout is a very powerful utility for designing a user interface because it can eliminate nested view groups and keep your layout hierarchy flat, which improves performance. If you find yourself using several nested LinearLayout groups, you may be able to replace them with a single RelativeLayout.</p>
+</blockquote>
+<p>大意是说RelativeLayout可以消除嵌套视图并且使布局扁平化，从而提高性能。如果你发现使用的几个嵌套的布局时，推荐使用相对布局来消除嵌套。所以对于上面的例子来说，使用相对布局就可以减少很多不必要的嵌套。代码比较简单我就不举例了。</p>
+<ol>
+<li>使用include标签</li>
+</ol>
+<p>观察到上面的布局，发现下面几个item的布局都是一样的，这时候可以使用ListView来代替或者使用include标签来重用相同的布局。例如我们的例子中，就可以先写好每个item的布局，然后在主布局里直接引用进去即可：</p>
+<p>item.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;wrap_content&quot;</div><div class="line">    android:background=&quot;#ffffff&quot;&gt;</div><div class="line"></div><div class="line">    &lt;TextView</div><div class="line">        android:id=&quot;@+id/tv_content&quot;</div><div class="line">        android:layout_width=&quot;wrap_content&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:layout_alignParentLeft=&quot;true&quot;</div><div class="line">        android:layout_centerVertical=&quot;true&quot;</div><div class="line">        android:layout_marginLeft=&quot;20dp&quot;</div><div class="line">        android:textColor=&quot;@android:color/black&quot;</div><div class="line">        android:textSize=&quot;16sp&quot; /&gt;</div><div class="line"></div><div class="line">    &lt;ImageView</div><div class="line">        android:layout_width=&quot;wrap_content&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:layout_alignParentRight=&quot;true&quot;</div><div class="line">        android:layout_centerVertical=&quot;true&quot;</div><div class="line">        android:layout_marginRight=&quot;20dp&quot;</div><div class="line">        android:src=&quot;@drawable/mass_selected&quot; /&gt;</div><div class="line">&lt;/RelativeLayout&gt;</div></pre></td></tr></table></figure></p>
+<p>main.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">.......</div><div class="line"></div><div class="line">&lt;include</div><div class="line">	android:id=&quot;@+id/item1&quot;</div><div class="line">    layout=&quot;@layout/item&quot; /&gt;</div><div class="line">    </div><div class="line">......</div></pre></td></tr></table></figure>
+<ol>
+<li>使用ViewStub标签</li>
+</ol>
+<p>在我们的布局中，还有这样一个按钮：<br><img src="http://offx8f6cx.bkt.clouddn.com/baduibadui6.png" alt="这里写图片描述"><br>它会根据不同的用户权限来确定是否显示。对于这种情况，完全可以考虑使用ViewStub标签。ViewStub是一个轻量级的View，它一个看不见的，不占布局位置，占用资源非常小的控件。可以为ViewStub指定一个布局，在Inflate布局的时候，只有ViewStub会被初始化，然后当ViewStub被设置为可见的时候，或是调用了ViewStub.inflate()的时候，ViewStub所向的布局就会被Inflate和实例化，然后ViewStub的布局属性都会传给它所指向的布局。这样，就可以使用ViewStub来方便的在运行时，要还是不要显示某个布局。我们总结起来无非就是以下几点：</p>
+<blockquote>
+<p>使用ViewStub.inflate()或者ViewStub.setVisibility(View.VISIBLE)来动态加载ViewStub<br>ViewStub只能Inflate一次，之后会被置空。因此不适用于要反复控制显示隐藏的情况<br>ViewStub控制的是一个布局，而非某个View</p>
+</blockquote>
+<p>我们来看一下ViewStub的部分源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line"> @SuppressWarnings(&#123;&quot;UnusedDeclaration&quot;&#125;)  </div><div class="line">public ViewStub(Context context, AttributeSet attrs, int defStyle) &#123;  </div><div class="line">    TypedArray a = context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.ViewStub,  </div><div class="line">            defStyle, 0);  </div><div class="line">    // 获取inflatedId属性  </div><div class="line">    mInflatedId = a.getResourceId(R.styleable.ViewStub_inflatedId, NO_ID);  </div><div class="line">    mLayoutResource = a.getResourceId(R.styleable.ViewStub_layout, 0);  </div><div class="line"></div><div class="line">    a.recycle();  </div><div class="line"></div><div class="line">    a = context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.View, defStyle, 0);  </div><div class="line">    mID = a.getResourceId(R.styleable.View_id, NO_ID);  </div><div class="line">    a.recycle();  </div><div class="line"></div><div class="line">    initialize(context);  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">private void initialize(Context context) &#123;  </div><div class="line">    mContext = context;  </div><div class="line">    setVisibility(GONE);// 设置不可教案  </div><div class="line">    setWillNotDraw(true);// 设置不绘制  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">@Override  </div><div class="line">protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) &#123;  </div><div class="line">    setMeasuredDimension(0, 0);// 宽高都为0  </div><div class="line">&#125;  </div><div class="line"></div><div class="line"></div><div class="line">@Override  </div><div class="line">public void setVisibility(int visibility) &#123;  </div><div class="line">    if (mInflatedViewRef != null) &#123;// 如果已经加载过则只设置Visibility属性  </div><div class="line">        View view = mInflatedViewRef.get();  </div><div class="line">        if (view != null) &#123;  </div><div class="line">            view.setVisibility(visibility);  </div><div class="line">        &#125; else &#123;  </div><div class="line">            throw new IllegalStateException(&quot;setVisibility called on un-referenced view&quot;);  </div><div class="line">        &#125;  </div><div class="line">    &#125; else &#123;// 如果未加载,这加载目标布局  </div><div class="line">        super.setVisibility(visibility);  </div><div class="line">        if (visibility == VISIBLE || visibility == INVISIBLE) &#123;  </div><div class="line">            inflate();// 调用inflate来加载目标布局  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">/** </div><div class="line"> * Inflates the layout resource identified by &#123;@link #getLayoutResource()&#125; </div><div class="line"> * and replaces this StubbedView in its parent by the inflated layout resource. </div><div class="line"> * </div><div class="line"> * @return The inflated layout resource. </div><div class="line"> * </div><div class="line"> */  </div><div class="line">public View inflate() &#123;  </div><div class="line">    final ViewParent viewParent = getParent();  </div><div class="line"></div><div class="line">    if (viewParent != null &amp;&amp; viewParent instanceof ViewGroup) &#123;  </div><div class="line">        if (mLayoutResource != 0) &#123;  </div><div class="line">            final ViewGroup parent = (ViewGroup) viewParent;// 获取ViewStub的parent view，也是目标布局根元素的parent view  </div><div class="line">            final LayoutInflater factory = LayoutInflater.from(mContext);  </div><div class="line">            final View view = factory.inflate(mLayoutResource, parent,  </div><div class="line">                    false);// 1、加载目标布局  </div><div class="line">          // 2、如果ViewStub的inflatedId不是NO_ID则把inflatedId设置为目标布局根元素的id，即评论ListView的id  </div><div class="line">            if (mInflatedId != NO_ID) &#123;  </div><div class="line">                view.setId(mInflatedId);  </div><div class="line">            &#125;  </div><div class="line"></div><div class="line">            final int index = parent.indexOfChild(this);  </div><div class="line">            parent.removeViewInLayout(this);// 3、将ViewStub自身从parent中移除  </div><div class="line"></div><div class="line">            final ViewGroup.LayoutParams layoutParams = getLayoutParams();  </div><div class="line">            if (layoutParams != null) &#123;  </div><div class="line">                parent.addView(view, index, layoutParams);// 4、将目标布局的根元素添加到parent中，有参数  </div><div class="line">            &#125; else &#123;  </div><div class="line">                parent.addView(view, index);// 4、将目标布局的根元素添加到parent中  </div><div class="line">            &#125;  </div><div class="line"></div><div class="line">            mInflatedViewRef = new WeakReference&lt;View&gt;(view);  </div><div class="line"></div><div class="line">            if (mInflateListener != null) &#123;  </div><div class="line">                mInflateListener.onInflate(this, view);  </div><div class="line">            &#125;  </div><div class="line"></div><div class="line">            return view;  </div><div class="line">        &#125; else &#123;  </div><div class="line">            throw new IllegalArgumentException(&quot;ViewStub must have a valid layoutResource&quot;);  </div><div class="line">        &#125;  </div><div class="line">    &#125; else &#123;  </div><div class="line">        throw new IllegalStateException(&quot;ViewStub must have a non-null ViewGroup viewParent&quot;);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从以上源码我们可以得知下列信息：</p>
+<blockquote>
+<p>调用ViewStub.setVisibility会触发ViewStub.inflate()<br>ViewStub.inflate()一次之后便会将自身从parent中移除，因此inflate只能调用一次。</p>
+</blockquote>
+<p>针对ViewStub的自身特性以及我们代码中的场景，我们完全可以使用ViewStub来动态加载布局，来提高性能。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//使用ViewStub标签引入一个布局，注意使用的是android:layout而非layout</div><div class="line"> &lt;ViewStub   </div><div class="line">   android:id=&quot;@+id/viewstub&quot;  </div><div class="line">   android:layout_width=&quot;wrap_content&quot;  </div><div class="line">   android:layout_height=&quot;wrap_content&quot;  </div><div class="line">   android:layout=&quot;@layout/viewstub_demo_image_layout&quot;/&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ViewStub stub = (ViewStub) findViewById(R.id.viewstub);  </div><div class="line">stub.inflate();  //该方法会返回ViewStub引入的布局view</div></pre></td></tr></table></figure>
+<p>我们来看一下最终经过以上优化步奏之后，现在的效果怎么样：<br><img src="http://offx8f6cx.bkt.clouddn.com/baduibaduibadui7_%E5%89%AF%E6%9C%AC.png" alt="这里写图片描述"></p>
+<p>可以看到比最初已经好很多了，剩下的还有一些优化点，这里就不一一举例了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/性能优化/" rel="tag">#性能优化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/06/Java简单分页请求框架/" rel="next" title="Java简单分页请求框架">
+                <i class="fa fa-chevron-left"></i> Java简单分页请求框架
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/03/打造灵活的统一空页面工具类/" rel="prev" title="打造灵活的统一空页面工具类">
+                打造灵活的统一空页面工具类 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/07/关于Android过度绘制的一个例子/"
+           data-title="关于Android过度绘制的一个例子" data-url="http://www.breakwhile.com/2017/04/07/关于Android过度绘制的一个例子/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="bReakWh1le" />
+          <p class="site-author-name" itemprop="name">bReakWh1le</p>
+          <p class="site-description motion-element" itemprop="description">写给自己：谦虚，勤奋，隐忍，不要害怕别人看低自己。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/breakwhile" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/piglast" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过度绘制分析"><span class="nav-number">2.</span> <span class="nav-text">过度绘制分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析布局层次"><span class="nav-number">3.</span> <span class="nav-text">分析布局层次</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决方案"><span class="nav-number">4.</span> <span class="nav-text">解决方案</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bReakWh1le</span>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"breakwhile"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("TgVnRQU3sl0JxNLayfuNw7ND-gzGzoHsz", "fX3qiVM4n7VG0Xd5sJMNPB8S");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

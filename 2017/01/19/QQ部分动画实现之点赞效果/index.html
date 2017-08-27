@@ -1,0 +1,877 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Nothing You Could Do:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android,动画," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+前言点赞是现在社交app中比较常用的功能，一个小小的点赞按钮如果能加上一些有趣动画，一来告诉用户你已经点了赞（这是对一些手残党极大的福音），二来人机之间的交互显得更加活泼。总之这对用户的体验来说是有不少的提高。
+
+举例及分析我们先来看一下腾讯部分产品的点赞效果：
+我们来分析一下这个动画的组成再研究一下如何实现。&amp;gt;1. 向上移动一小段距离">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QQ部分动画实现之点赞效果">
+<meta property="og:url" content="http://www.breakwhile.com/2017/01/19/QQ部分动画实现之点赞效果/index.html">
+<meta property="og:site_name" content="BreakWhile's Notes">
+<meta property="og:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+前言点赞是现在社交app中比较常用的功能，一个小小的点赞按钮如果能加上一些有趣动画，一来告诉用户你已经点了赞（这是对一些手残党极大的福音），二来人机之间的交互显得更加活泼。总之这对用户的体验来说是有不少的提高。
+
+举例及分析我们先来看一下腾讯部分产品的点赞效果：
+我们来分析一下这个动画的组成再研究一下如何实现。&amp;gt;1. 向上移动一小段距离">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/QQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB1.gif">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/QQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB2.gif">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB3.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB5.gif">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB6.gif">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB7.gif">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB8.png">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB9.gif">
+<meta property="og:updated_time" content="2017-02-04T03:15:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QQ部分动画实现之点赞效果">
+<meta name="twitter:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+前言点赞是现在社交app中比较常用的功能，一个小小的点赞按钮如果能加上一些有趣动画，一来告诉用户你已经点了赞（这是对一些手残党极大的福音），二来人机之间的交互显得更加活泼。总之这对用户的体验来说是有不少的提高。
+
+举例及分析我们先来看一下腾讯部分产品的点赞效果：
+我们来分析一下这个动画的组成再研究一下如何实现。&amp;gt;1. 向上移动一小段距离">
+<meta name="twitter:image" content="http://offx8f6cx.bkt.clouddn.com/QQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6343102638250264000',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://www.breakwhile.com/2017/01/19/QQ部分动画实现之点赞效果/"/>
+
+
+  <title> QQ部分动画实现之点赞效果 | BreakWhile's Notes </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8339a5f89fed3a0283bc1e35eb3b9cb8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BreakWhile's Notes</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">心无所恃，随遇而安。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                QQ部分动画实现之点赞效果
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-01-19T14:16:17+08:00" content="2017-01-19">
+              2017-01-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android自定义View/" itemprop="url" rel="index">
+                    <span itemprop="name">Android自定义View</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/19/QQ部分动画实现之点赞效果/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/19/QQ部分动画实现之点赞效果/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/01/19/QQ部分动画实现之点赞效果/" class="leancloud_visitors" data-flag-title="QQ部分动画实现之点赞效果">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>点赞是现在社交app中比较常用的功能，一个小小的点赞按钮如果能加上一些有趣动画，一来告诉用户你已经点了赞（这是对一些手残党极大的福音），二来人机之间的交互显得更加活泼。总之这对用户的体验来说是有不少的提高。</p>
+</blockquote>
+<h1 id="举例及分析"><a href="#举例及分析" class="headerlink" title="举例及分析"></a>举例及分析</h1><p>我们先来看一下腾讯部分产品的点赞效果：</p>
+<center><img src="http://offx8f6cx.bkt.clouddn.com/QQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB1.gif" alt=""><br></center><br>我们来分析一下这个动画的组成再研究一下如何实现。<br><br>&gt;1. 向上移动一小段距离。<br>&gt;2. 由非透明变成透明。<br><a id="more"></a><br>最终效果：<br><center><br><img src="http://offx8f6cx.bkt.clouddn.com/QQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB2.gif" alt=""></center>
+
+<p>在Android动画中，总共有两种类型的动画View Animation(视图动画)和Property Animator(属性动画)。其中，</p>
+<ul>
+<li>View Animation包括Tween Animation（补间动画）和Frame Animation(逐帧动画)</li>
+<li>Property Animator包括ValueAnimator和ObjectAnimation；</li>
+</ul>
+<p>我们将分别使用这两种动画进行实现。</p>
+<h1 id="使用View-Animation（视图动画）实现"><a href="#使用View-Animation（视图动画）实现" class="headerlink" title="使用View Animation（视图动画）实现"></a>使用View Animation（视图动画）实现</h1><p>Android的animation由四种类型组成：alpha、scale、translate、rotate。官方文档：<br><a href="http://developer.android.com/guide/topics/resources/animation-resource.html" title="《Animation Resources》" target="_blank" rel="external">http://developer.android.com/guide/topics/resources/animation-resource.html</a><br>根据上面的分析，我们要使用到alpha和translate。</p>
+<p><strong>alpha标签——调节透明度</strong><br>alpha是调节透明度动画，可以实现动态调控件的透明度，有下面几个属性：</p>
+<ul>
+<li>android:fromAlpha   动画开始的透明度，从0.0 –1.0 ，0.0表示全透明，1.0表示完全不透明</li>
+<li>android:toAlpha       动画结束时的透明度，也是从0.0 –1.0 ，0.0表示全透明，1.0表示完全不透明</li>
+</ul>
+<p>以AS为例，首先新建一个工程，然后在res文件夹下，新建一个anim文件夹，再新建一个dianzan.xml文件，结构如图所示：</p>
+<p><img src="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB3.png" alt="这里写图片描述"></p>
+<p>里面放入我们的alpha动画代码：<br>这个点赞的alpha动画也比较简单，透明度从非透明变成透明即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;alpha</div><div class="line">     android:fromAlpha=&quot;1.0&quot;</div><div class="line">     android:toAlpha=&quot;0&quot;&gt;</div><div class="line">&lt;/alpha&gt;</div></pre></td></tr></table></figure>
+<p>使用的方式也很简单，两个步骤：</p>
+<ol>
+<li>通过scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.scaleanim);从XML文件中获取动画</li>
+<li>调用控件的startAnimation方法将动画传进去即可。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.dianzan);</div><div class="line">dianzanView.startAnimation(animation);</div></pre></td></tr></table></figure>
+<p>我们来看一下加上这个动画后有什么效果。布局比较简单这里就不列出，文章后面会有完整代码下载。</p>
+<p><center><img src="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB5.gif" alt=""></center><br>嗯，效果有了。我们再加上平移动画看看。<br><strong>translate标签 —— 平移</strong><br>顾名思义，使用这个标签可以沿X轴和Y轴移动。translate有下面几个属性：</p>
+<ul>
+<li>android:fromXDelta     起始点X轴坐标，可以是数值、百分数、百分数p 三种样式，比如 50、50%、50%p，具体意义已在scale标签中讲述，这里就不再重讲</li>
+<li>android:fromYDelta    起始点Y轴从标，可以是数值、百分数、百分数p 三种样式；</li>
+<li>android:toXDelta         结束点X轴坐标</li>
+<li>android:toYDelta        结束点Y轴坐标<br>对于我们要实现的这个点赞动画，比较简单，在Y轴上往上移动一小段距离即可。因为Android定义的X轴是从左往右，y轴是从上往下，所以我们终点的y轴数值应该是一个负数。代码如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;translate</div><div class="line">    android:duration=&quot;1000&quot;</div><div class="line">    android:fromXDelta=&quot;0&quot;</div><div class="line">    android:fromYDelta=&quot;0&quot;</div><div class="line">    android:toXDelta=&quot;0&quot;</div><div class="line">    android:toYDelta=&quot;-25&quot; /&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>效果如图：</p>
+<p><center><img src="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB6.gif" alt="这里写图片描述"></center><br>基本也能达到效果。那么问题来了，如何将这两个动画整合起来？Android给我们提供了一个标签用于定义一系列动画的集合。这个标签就是set。<br><strong>set标签——定义动作合集</strong><br>set标签自已是没有属性的，他的属性都是从Animation继承而来，但当它们用于Set标签时，就会对Set标签下的所有子控件都产生作用。<br>属性有：（从Animation类继承的属性）</p>
+<ul>
+<li>android:duration        动画持续时间，以毫秒为单位 </li>
+<li>android:fillAfter          如果设置为true，控件动画结束时，将保持动画最后时的状态</li>
+<li>android:fillBefore       如果设置为true,控件动画结束时，还原到开始动画前的状态</li>
+<li>android:fillEnabled    与android:fillBefore 效果相同，都是在动画结束时，将控件还原到初始化状态</li>
+<li>android:repeatCount 重复次数</li>
+<li>android:repeatMode    重复类型，有reverse和restart两个值，reverse表示倒序回放，restart表示重新放一遍，必须与repeatCount一起使用才能看到效果。因为这里的意义是重复的类型，即回放时的动作。</li>
+</ul>
+<p>将前面两个动画整合起来，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;set xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:duration=&quot;1000&quot;</div><div class="line">    android:fillBefore=&quot;true&quot;&gt;</div><div class="line">    &lt;translate</div><div class="line">        android:fromXDelta=&quot;0&quot;</div><div class="line">        android:fromYDelta=&quot;0&quot;</div><div class="line">        android:toXDelta=&quot;0&quot;</div><div class="line">        android:toYDelta=&quot;-40&quot;/&gt;</div><div class="line">    &lt;alpha</div><div class="line">        android:fromAlpha=&quot;1.0&quot;</div><div class="line">        android:toAlpha=&quot;0&quot;&gt;</div><div class="line">    &lt;/alpha&gt;</div><div class="line">&lt;/set&gt;</div></pre></td></tr></table></figure>
+<p>效果如图：</p>
+<p><center><br><img src="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB7.gif" alt="这里写图片描述"></center><br>离我们最终效果越来越近了。不过细心的朋友应该发现了，实际的效果是+1是在点击了之后突然出现，之后再逐渐变成透明。所以我们还应该为动画设置一个监听，在动画开始时将+1图表设置可见，动画结束时再gone掉。Android为Animation提供了一个监听器AnimationListener，它有下面几个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//动画结束时调用，记住如果设置重复次数为无限时，这个方法是不会被调用的</div><div class="line">void onAnimationStart(Animation var1);</div><div class="line"></div><div class="line">//动画开始时调用</div><div class="line">void onAnimationEnd(Animation var1);</div><div class="line"></div><div class="line">//动画重复时调用</div><div class="line">void onAnimationRepeat(Animation var1);</div></pre></td></tr></table></figure>
+<p>因此我们这样做就行了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.dianzan);</div><div class="line">dianzanView.startAnimation(animation);</div><div class="line">notifyDataSetChanged();</div><div class="line">animation.setAnimationListener(new Animation.AnimationListener() &#123;</div><div class="line">    @Override</div><div class="line">    public void onAnimationStart(Animation animation) &#123;</div><div class="line">        dianzanView.setVisibility(View.VISIBLE);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override </div><div class="line">    public void onAnimationEnd(Animation animation) &#123;</div><div class="line">        dianzanView.setVisibility(View.GONE);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void onAnimationRepeat(Animation animation) &#123;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这样一来效果就达到要求了。</p>
+<h1 id="使用Property-Animation（属性动画）实现"><a href="#使用Property-Animation（属性动画）实现" class="headerlink" title="使用Property Animation（属性动画）实现"></a>使用Property Animation（属性动画）实现</h1><p>Property Animator包括ValueAnimator和ObjectAnimation；<br>为什么要引入Property Animator(属性动画)？</p>
+<ol>
+<li>Property Animator能实现补间动画无法实现的功能 </li>
+<li>View Animation仅能对指定的控件做动画，而Property Animator是通过改变控件某一属性值来做动画的。 </li>
+</ol>
+<p>因为本文并不是要介绍属性动画如何使用，因此基本用法这里就略过，有兴趣的朋友可以去查阅相关资料。<br>下面介绍一下ValueAnimator的简单使用。总共有两步：<br>要使用ValueAnimaiton，总共有两步：<br>第一步：创建ValueAnimator实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//创建一个值为[0,300]的动画，动画时常为1S</div><div class="line">ValueAnimator animator = ValueAnimator.ofInt(0,300);</div><div class="line">animator.setDuration(1000);</div><div class="line">animator.start();</div></pre></td></tr></table></figure>
+<p>第二步：添加监听。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">ValueAnimator animator = ValueAnimator.ofInt(0,300);</div><div class="line">animator.setDuration(1000);</div><div class="line"></div><div class="line">animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">    @Override</div><div class="line">    public void onAnimationUpdate(ValueAnimator animation) &#123;</div><div class="line">        int curValue = (int)animation.getAnimatedValue();</div><div class="line">        Log.d(&quot;myanimator&quot;, &quot;curValue:&quot; + curValue);</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line">animator.start();</div></pre></td></tr></table></figure>
+<p>动画开始后，这个监听会返回animation.getAnimatedValue()的当前值，通过log打印如下：<br><img src="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB8.png" alt="这里写图片描述"><br>可以发现这个值会从0开始打印到300。所以按照前面视图动画的逻辑，我们可以很容易就写出代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ValueAnimator animator = ValueAnimator.ofFloat(0, 1);</div><div class="line">animator.setDuration(1000);</div><div class="line">animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">    @Override</div><div class="line">    public void onAnimationUpdate(ValueAnimator valueAnimator) &#123;</div><div class="line">        float curValue = (float) animator.getAnimatedValue();</div><div class="line">        if (curValue == 0) &#123;</div><div class="line">            dianzanView.setVisibility(View.VISIBLE);</div><div class="line">        &#125;</div><div class="line">        if (curValue == 1) &#123;</div><div class="line">            dianzanView.setVisibility(View.GONE);</div><div class="line">        &#125;</div><div class="line">        dianzanView.setTranslationY(curValue * -25);</div><div class="line">        dianzanView.setAlpha(1 - curValue);</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line">animator.start();</div></pre></td></tr></table></figure>
+<p>我们定义了一个从0变化到1的浮点数来反应我们这个动画的执行过程。在变化过程中，我们将控件用setTranslationY()方法向上平移一段距离，同时通过setAlpha()设置控件的透明度。因为透明度从0是代表全透明，1代表非透明。因此要1减去当前的值。最终也能达到我们要的效果：</p>
+<p><img src="http://offx8f6cx.bkt.clouddn.com/dianzanQQ%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB9.gif" alt="这里写图片描述"></p>
+<h1 id="总结及源码下载"><a href="#总结及源码下载" class="headerlink" title="总结及源码下载"></a>总结及源码下载</h1><p>本篇介绍了一个简单动画的实现。千里之行始于足下，之后会逐步实现一些复杂，高级的动画，与各位一起学习，进步。<br>本文代码下载：<a href="http://download.csdn.net/detail/qa678/9741348" target="_blank" rel="external">http://download.csdn.net/detail/qa678/9741348</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/动画/" rel="tag">#动画</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/08/Android动态修改通讯录联系人的解决方案/" rel="next" title="Android动态修改通讯录联系人的解决方案">
+                <i class="fa fa-chevron-left"></i> Android动态修改通讯录联系人的解决方案
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/04/QQ部分动画实现之多彩气泡/" rel="prev" title="QQ部分动画实现之多彩气泡">
+                QQ部分动画实现之多彩气泡 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/19/QQ部分动画实现之点赞效果/"
+           data-title="QQ部分动画实现之点赞效果" data-url="http://www.breakwhile.com/2017/01/19/QQ部分动画实现之点赞效果/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="bReakWh1le" />
+          <p class="site-author-name" itemprop="name">bReakWh1le</p>
+          <p class="site-description motion-element" itemprop="description">写给自己：谦虚，勤奋，隐忍，不要害怕别人看低自己。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/breakwhile" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/piglast" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#举例及分析"><span class="nav-number">2.</span> <span class="nav-text">举例及分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用View-Animation（视图动画）实现"><span class="nav-number">3.</span> <span class="nav-text">使用View Animation（视图动画）实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Property-Animation（属性动画）实现"><span class="nav-number">4.</span> <span class="nav-text">使用Property Animation（属性动画）实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结及源码下载"><span class="nav-number">5.</span> <span class="nav-text">总结及源码下载</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bReakWh1le</span>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"breakwhile"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("TgVnRQU3sl0JxNLayfuNw7ND-gzGzoHsz", "fX3qiVM4n7VG0Xd5sJMNPB8S");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

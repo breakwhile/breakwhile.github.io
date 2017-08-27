@@ -1,0 +1,818 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Nothing You Could Do:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android,空页面，工具类，自定义view," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+
+前言在我们的开发过程中经常会碰到需要显示一些空数据或者异常数据的UI。如果我们使用ListView的话可以很方便去设置emptyview，使用Recyclerview的话则麻烦一点需要自己定制。但是如果在不是使用这些提供好接口的控件时，就需要自己代码里去绘制一个空界面然后动态控制，不仅麻烦而且增加了代码的理解难度。因此我期望打造一个简单灵活">
+<meta property="og:type" content="article">
+<meta property="og:title" content="打造灵活的统一空页面工具类">
+<meta property="og:url" content="http://www.breakwhile.com/2017/05/03/打造灵活的统一空页面工具类/index.html">
+<meta property="og:site_name" content="BreakWhile's Notes">
+<meta property="og:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+
+前言在我们的开发过程中经常会碰到需要显示一些空数据或者异常数据的UI。如果我们使用ListView的话可以很方便去设置emptyview，使用Recyclerview的话则麻烦一点需要自己定制。但是如果在不是使用这些提供好接口的控件时，就需要自己代码里去绘制一个空界面然后动态控制，不仅麻烦而且增加了代码的理解难度。因此我期望打造一个简单灵活">
+<meta property="og:image" content="http://offx8f6cx.bkt.clouddn.com/emptyuiemptyui1.png">
+<meta property="og:updated_time" content="2017-05-03T05:24:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="打造灵活的统一空页面工具类">
+<meta name="twitter:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。
+
+前言在我们的开发过程中经常会碰到需要显示一些空数据或者异常数据的UI。如果我们使用ListView的话可以很方便去设置emptyview，使用Recyclerview的话则麻烦一点需要自己定制。但是如果在不是使用这些提供好接口的控件时，就需要自己代码里去绘制一个空界面然后动态控制，不仅麻烦而且增加了代码的理解难度。因此我期望打造一个简单灵活">
+<meta name="twitter:image" content="http://offx8f6cx.bkt.clouddn.com/emptyuiemptyui1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6343102638250264000',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://www.breakwhile.com/2017/05/03/打造灵活的统一空页面工具类/"/>
+
+
+  <title> 打造灵活的统一空页面工具类 | BreakWhile's Notes </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8339a5f89fed3a0283bc1e35eb3b9cb8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BreakWhile's Notes</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">心无所恃，随遇而安。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                打造灵活的统一空页面工具类
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-03T13:08:53+08:00" content="2017-05-03">
+              2017-05-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android工具类封装/" itemprop="url" rel="index">
+                    <span itemprop="name">Android工具类封装</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/03/打造灵活的统一空页面工具类/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/03/打造灵活的统一空页面工具类/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/05/03/打造灵活的统一空页面工具类/" class="leancloud_visitors" data-flag-title="打造灵活的统一空页面工具类">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在我们的开发过程中经常会碰到需要显示一些空数据或者异常数据的UI。如果我们使用ListView的话可以很方便去设置emptyview，使用Recyclerview的话则麻烦一点需要自己定制。但是如果在不是使用这些提供好接口的控件时，就需要自己代码里去绘制一个空界面然后动态控制，不仅麻烦而且增加了代码的理解难度。因此我期望打造一个简单灵活的统一空数据UI控制类来满足我们的需求。</p>
+<h1 id="思路分析及实现"><a href="#思路分析及实现" class="headerlink" title="思路分析及实现"></a>思路分析及实现</h1><p>因为我们的核心要求是灵活，所以这个工具类应该能够去将布局上的任何一个控件替换成空页面。我的思路是先在被替换的控件的父视图找到它然后移除，用我们的空页面去替换。这样子就可以实现任意替换的效果，我们灵活的要求也就达到了。</p>
+<a id="more"></a>
+<ul>
+<li>在父视图中找到被替换的view</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">private void init() &#123;</div><div class="line">    params = targetView.getLayoutParams();</div><div class="line">    //找到被替换view的父视图</div><div class="line">    if (targetView.getParent() != null) &#123;</div><div class="line">        parentView = (ViewGroup) targetView.getParent();</div><div class="line">    &#125; else &#123;</div><div class="line">        parentView = (ViewGroup) targetView.getRootView().findViewById(android.R.id.content);</div><div class="line">    &#125;</div><div class="line">    //找到该view在父视图中的索引</div><div class="line">    int count = parentView.getChildCount();</div><div class="line">    for (int index = 0; index &lt; count; index++) &#123;</div><div class="line">        if (targetView == parentView.getChildAt(index)) &#123;</div><div class="line">            viewIndex = index;</div><div class="line">                    break;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    currentView = targetView;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>显示方法：用空页面替换目标view</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">private void showLayout(View emptyView) &#123;</div><div class="line">    if (parentView == null) &#123;</div><div class="line">        init();</div><div class="line">    &#125;</div><div class="line">    this.currentView = emptyView;</div><div class="line">    //如果已经是那个view，那就不需要再进行替换操作了</div><div class="line">    if (parentView.getChildAt(viewIndex) != emptyView) &#123;</div><div class="line">        ViewGroup parent = (ViewGroup) emptyView.getParent();</div><div class="line">        if (parent != null) &#123;</div><div class="line">            parent.removeView(emptyView);</div><div class="line">        &#125;</div><div class="line">        parentView.removeViewAt(viewIndex);</div><div class="line">        parentView.addView(emptyView, viewIndex, params);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上这两个方法就是我们这个工具类的核心方法。怎么样？是不是很简单？</p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>根据我们项目的需求，我这边制定了一个默认的空页面给外部使用，一般情况直接用默认即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 通用空页面布局</div><div class="line"> * 背景图+文案</div><div class="line"> */</div><div class="line"></div><div class="line">public class DefaultEmptyView extends RelativeLayout &#123;</div><div class="line">    private TextView mTvEmpty;</div><div class="line">    private ImageView mIvEmpty;</div><div class="line"></div><div class="line">    public DefaultEmptyView(Context context) &#123;</div><div class="line">        super(context);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public DefaultEmptyView(Context context, AttributeSet attrs) &#123;</div><div class="line">        super(context, attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onFinishInflate() &#123;</div><div class="line">        super.onFinishInflate();</div><div class="line">        mTvEmpty = (TextView) findViewById(R.id.tv_empty);</div><div class="line">        mIvEmpty = (ImageView) findViewById(R.id.iv_empty);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setEmptyText(int resid) &#123;</div><div class="line">        mTvEmpty.setText(resid);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setEmptyText(String text) &#123;</div><div class="line">        mTvEmpty.setText(text);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setEmptyIcon(int resid) &#123;</div><div class="line">        mIvEmpty.setImageResource(resid);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>布局：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;DefaultEmptyView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    android:background=&quot;@color/activity_layout_bg_gray&quot;&gt;</div><div class="line"></div><div class="line">    &lt;LinearLayout</div><div class="line">        android:layout_width=&quot;wrap_content&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:layout_centerInParent=&quot;true&quot;</div><div class="line">        android:gravity=&quot;center&quot;</div><div class="line">        android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">        &lt;ImageView</div><div class="line">            android:id=&quot;@+id/iv_empty&quot;</div><div class="line">            android:layout_width=&quot;wrap_content&quot;</div><div class="line">            android:layout_height=&quot;wrap_content&quot;</div><div class="line">            android:src=&quot;@drawable/approval_list_tip&quot; /&gt;</div><div class="line"></div><div class="line">        &lt;TextView</div><div class="line">            android:id=&quot;@+id/tv_empty&quot;</div><div class="line">            android:layout_width=&quot;wrap_content&quot;</div><div class="line">            android:layout_height=&quot;wrap_content&quot;</div><div class="line">            android:layout_marginLeft=&quot;@dimen/margin_30dp&quot;</div><div class="line">            android:layout_marginRight=&quot;@dimen/margin_30dp&quot;</div><div class="line">            android:layout_marginTop=&quot;@dimen/margin_20dp&quot;</div><div class="line">            android:lineSpacingExtra=&quot;@dimen/margin_8dp&quot;</div><div class="line">            android:textSize=&quot;16sp&quot;</div><div class="line">            android:textColor=&quot;@color/text_color_item_subtitle&quot;/&gt;</div><div class="line"></div><div class="line">    &lt;/LinearLayout&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;/DefaultEmptyView&gt;</div></pre></td></tr></table></figure>
+<p>工具类完整代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 空页面控制器</div><div class="line"> */</div><div class="line"></div><div class="line">public class EmptyViewController &#123;</div><div class="line">    private Context mContext;</div><div class="line">    private CommonEmptyHelper mHelper;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * @param targetView 需要展示需要替换为empty界面的同级布局(比如listview)</div><div class="line">     */</div><div class="line">    public EmptyViewController(Context context, View targetView) &#123;</div><div class="line">        if (targetView == null) &#123;</div><div class="line">            throw new IllegalArgumentException(&quot;You must return a right target view for empty view&quot;);</div><div class="line">        &#125;</div><div class="line">        this.mContext = context;</div><div class="line">        this.mHelper = new CommonEmptyHelper(targetView);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 显示默认空页面</div><div class="line">     */</div><div class="line">    public void showEmptyView(String subtitle) &#123;</div><div class="line">        View emptyView = getDefaultEmptyView();</div><div class="line">        if (emptyView instanceof DefaultEmptyView) &#123;</div><div class="line">            if (!TextUtils.isEmpty(subtitle)) &#123;</div><div class="line">                ((DefaultEmptyView) emptyView).setEmptyText(subtitle);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        showLayout(emptyView);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 显示自定义的空页面</div><div class="line">     */</div><div class="line">    public void showLayout(View emptyLayout) &#123;</div><div class="line">        mHelper.showLayout(emptyLayout);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 返回默认空数据layout</div><div class="line">     */</div><div class="line">    private View getDefaultEmptyView() &#123;</div><div class="line">        DefaultEmptyView emptyDefaultView = (DefaultEmptyView) LayoutInflater.from(mContext).inflate(R.layout.common_view_empty, null);</div><div class="line">        emptyDefaultView.setEmptyText(R.string.none_data);</div><div class="line">        return emptyDefaultView;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 恢复之前的视图</div><div class="line">     */</div><div class="line">    public void restoreView() &#123;</div><div class="line">        mHelper.restoreView();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    private class CommonEmptyHelper &#123;</div><div class="line">        private View targetView;</div><div class="line">        private ViewGroup parentView;</div><div class="line">        private int viewIndex;</div><div class="line">        private ViewGroup.LayoutParams params;</div><div class="line">        private View currentView;</div><div class="line"></div><div class="line">        private CommonEmptyHelper(View view) &#123;</div><div class="line">            super();</div><div class="line">            this.targetView = view;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        private void init() &#123;</div><div class="line">            params = targetView.getLayoutParams();</div><div class="line">            //找到被替换view的父视图</div><div class="line">            if (targetView.getParent() != null) &#123;</div><div class="line">                parentView = (ViewGroup) targetView.getParent();</div><div class="line">            &#125; else &#123;</div><div class="line">                parentView = (ViewGroup) targetView.getRootView().findViewById(android.R.id.content);</div><div class="line">            &#125;</div><div class="line">            //找到该view在父视图中的索引</div><div class="line">            int count = parentView.getChildCount();</div><div class="line">            for (int index = 0; index &lt; count; index++) &#123;</div><div class="line">                if (targetView == parentView.getChildAt(index)) &#123;</div><div class="line">                    viewIndex = index;</div><div class="line">                    break;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            currentView = targetView;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public View getCurrentLayout() &#123;</div><div class="line">            return currentView;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        private void restoreView() &#123;</div><div class="line">            showLayout(targetView);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        private void showLayout(View emptyView) &#123;</div><div class="line">            if (parentView == null) &#123;</div><div class="line">                init();</div><div class="line">            &#125;</div><div class="line">            this.currentView = emptyView;</div><div class="line">            //如果已经是那个view，那就不需要再进行替换操作了</div><div class="line">            if (parentView.getChildAt(viewIndex) != emptyView) &#123;</div><div class="line">                ViewGroup parent = (ViewGroup) emptyView.getParent();</div><div class="line">                if (parent != null) &#123;</div><div class="line">                    parent.removeView(emptyView);</div><div class="line">                &#125;</div><div class="line">                parentView.removeViewAt(viewIndex);</div><div class="line">                parentView.addView(emptyView, viewIndex, params);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public View inflate(int layoutId) &#123;</div><div class="line">            return LayoutInflater.from(targetView.getContext()).inflate(layoutId, null);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public Context getContext() &#123;</div><div class="line">            return targetView.getContext();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public View getView() &#123;</div><div class="line">            return targetView;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">／／一句话代码调用即可，构造方法里第二个参数为要替换空页面的控件</div><div class="line">new EmptyViewController(this, findViewById(R.id.srollview)).showEmptyView(&quot;这里输入文案&quot;);</div></pre></td></tr></table></figure>
+<ul>
+<li>最终效果如下：</li>
+</ul>
+<center><img src="http://offx8f6cx.bkt.clouddn.com/emptyuiemptyui1.png" alt="这里写图片描述"></center>
+
+<p>当然，这只是默认实现的UI，有特殊需要时用自己实现的布局去替换就好，十分方便。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/空页面，工具类，自定义view/" rel="tag">#空页面，工具类，自定义view</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/07/关于Android过度绘制的一个例子/" rel="next" title="关于Android过度绘制的一个例子">
+                <i class="fa fa-chevron-left"></i> 关于Android过度绘制的一个例子
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/03/打造灵活的统一空页面工具类/"
+           data-title="打造灵活的统一空页面工具类" data-url="http://www.breakwhile.com/2017/05/03/打造灵活的统一空页面工具类/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="bReakWh1le" />
+          <p class="site-author-name" itemprop="name">bReakWh1le</p>
+          <p class="site-description motion-element" itemprop="description">写给自己：谦虚，勤奋，隐忍，不要害怕别人看低自己。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/breakwhile" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/piglast" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路分析及实现"><span class="nav-number">2.</span> <span class="nav-text">思路分析及实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法"><span class="nav-number">3.</span> <span class="nav-text">使用方法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bReakWh1le</span>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"breakwhile"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("TgVnRQU3sl0JxNLayfuNw7ND-gzGzoHsz", "fX3qiVM4n7VG0Xd5sJMNPB8S");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>
